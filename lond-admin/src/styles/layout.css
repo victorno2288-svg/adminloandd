@@ -1,0 +1,357 @@
+/* ===== ADMIN LAYOUT (Sidebar + Topbar) ===== */
+.admin-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* ===== SIDEBAR ===== */
+.sidebar {
+  width: 248px;
+  background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 100;
+  box-shadow: 4px 0 24px rgba(0, 0, 0, 0.25);
+}
+
+.sidebar.collapsed {
+  width: 64px;
+}
+
+/* Header */
+.sidebar-header {
+  padding: 18px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  color: var(--primary);
+  font-size: 22px;
+  font-weight: 700;
+}
+
+/* Nav scroll area */
+.sidebar-nav {
+  flex: 1;
+  padding: 8px 0 12px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,0.1) transparent;
+}
+
+.sidebar-nav::-webkit-scrollbar {
+  width: 4px;
+}
+.sidebar-nav::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.12);
+  border-radius: 4px;
+}
+
+/* Section label */
+.sidebar-section-label {
+  padding: 14px 18px 5px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: rgba(148, 163, 184, 0.55);
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+/* Nav links */
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 10px 14px 10px 16px;
+  color: rgba(203, 213, 225, 0.75);
+  text-decoration: none;
+  font-size: 13.5px;
+  font-weight: 400;
+  transition: all 0.18s ease;
+  border-radius: 0;
+  position: relative;
+  margin: 1px 8px;
+  border-radius: 8px;
+  white-space: nowrap;
+}
+
+.sidebar-link:hover {
+  background: rgba(255, 255, 255, 0.07);
+  color: #f1f5f9;
+}
+
+.sidebar-link.active {
+  background: linear-gradient(135deg, rgba(4, 170, 109, 0.28) 0%, rgba(4, 170, 109, 0.14) 100%);
+  color: #4ade80;
+  font-weight: 600;
+  box-shadow: inset 3px 0 0 #04AA6D;
+}
+
+.sidebar-link i {
+  width: 18px;
+  text-align: center;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.sidebar-link.active i {
+  color: #4ade80;
+}
+
+/* Collapsed mode */
+.sidebar.collapsed .sidebar-link {
+  justify-content: center;
+  padding: 12px;
+  margin: 2px 8px;
+  gap: 0;
+}
+
+.sidebar.collapsed .sidebar-link span {
+  display: none;
+}
+
+.sidebar.collapsed .sidebar-section-label {
+  display: none;
+}
+
+/* ===== MAIN AREA ===== */
+.main-area {
+  flex: 1;
+  margin-left: 248px;
+  transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  min-width: 0;
+}
+
+.main-area.expanded {
+  margin-left: 64px;
+}
+
+/* ===== TOPBAR ===== */
+.topbar {
+  height: 58px;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  border-bottom: 1px solid #e2e8f0;
+  box-shadow: 0 1px 6px rgba(15, 23, 42, 0.06);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.topbar-toggle {
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 7px 13px;
+  color: #475569;
+  cursor: pointer;
+  font-size: 15px;
+  display: flex !important;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  transition: all 0.18s ease;
+}
+
+.topbar-toggle:hover {
+  background: #e2e8f0;
+  color: #1e293b;
+}
+
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.topbar-user {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13.5px;
+  color: #334155;
+  font-weight: 500;
+}
+
+.topbar-user i {
+  font-size: 20px;
+  color: var(--primary);
+}
+
+.topbar-logout {
+  background: none;
+  border: 1px solid #e2e8f0;
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-family: 'Prompt', sans-serif;
+  font-size: 13px;
+  cursor: pointer;
+  color: #94a3b8;
+  transition: all 0.18s ease;
+}
+
+.topbar-logout:hover {
+  border-color: var(--red);
+  color: var(--red);
+  background: #fff5f5;
+}
+
+/* Page Content */
+.page-content {
+  padding: 24px;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 1024px) {
+  .sidebar {
+    width: 248px;
+    box-shadow: 6px 0 24px rgba(0, 0, 0, 0.3);
+    z-index: 200;
+    transform: translateX(0);
+    transition: transform 0.3s ease, width 0.3s ease;
+  }
+
+  .sidebar.collapsed {
+    width: 248px;
+    transform: translateX(-100%);
+  }
+
+  .main-area {
+    margin-left: 0 !important;
+    width: 100%;
+  }
+
+  .main-area.expanded {
+    margin-left: 0 !important;
+  }
+
+  .topbar {
+    padding: 0 12px;
+  }
+
+  .page-content {
+    padding: 12px;
+  }
+
+  .sidebar-overlay {
+    display: block;
+  }
+}
+
+@media (min-width: 1025px) {
+  .sidebar-overlay {
+    display: none !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .topbar-user span {
+    display: none;
+  }
+
+  .topbar-right {
+    gap: 8px;
+  }
+
+  .topbar-logout {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+
+  .page-content {
+    padding: 8px;
+  }
+}
+
+/* ===== Responsive Tables ===== */
+/* Tables on mobile scroll horizontally */
+.table-responsive {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 768px) {
+  table {
+    min-width: 600px;
+  }
+
+  /* Wrap all tables automatically on mobile */
+  .card table,
+  .table-wrapper table {
+    min-width: 600px;
+  }
+}
+
+/* ===== Stats Grid (responsive) ===== */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+@media (max-width: 900px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .stats-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+}
+
+/* ===== Filter Row (responsive) ===== */
+.filter-row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+@media (max-width: 600px) {
+  .filter-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filter-row select,
+  .filter-row input,
+  .filter-row button {
+    width: 100%;
+  }
+}
+
+/* ===== Mobile Modal ===== */
+@media (max-width: 768px) {
+  .modal {
+    padding-bottom: env(safe-area-inset-bottom, 16px);
+  }
+
+  .modal-body {
+    -webkit-overflow-scrolling: touch;
+    overflow-y: auto;
+  }
+
+  body.modal-open {
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
+  }
+}

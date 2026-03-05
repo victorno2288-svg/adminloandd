@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LOANDD — Workflow การทำงาน</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&display=swap');
+
+    /* ===== RESET ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* ===== BASE ===== */
+    body {
+      font-family: 'Sarabun', sans-serif;
+      background: #f0f4f8;
+      color: #1a202c;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .page {
+      width: 210mm;
+      min-height: 297mm;
+      margin: 20px auto;
+      background: #fff;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+      padding: 14mm 14mm 14mm 14mm;
+      page-break-after: always;
+    }
+
+    /* ===== HEADER ===== */
+    .doc-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 3px solid #04AA6D;
+      padding-bottom: 10px;
+      margin-bottom: 18px;
+    }
+
+    .doc-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-circle {
+      width: 44px;
+      height: 44px;
+      background: linear-gradient(135deg, #04AA6D, #038a58);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    .doc-title-main { font-size: 22px; font-weight: 800; color: #0f172a; line-height: 1.1; }
+    .doc-title-sub { font-size: 11px; color: #64748b; font-weight: 400; margin-top: 2px; }
+
+    .doc-meta {
+      text-align: right;
+      font-size: 11px;
+      color: #94a3b8;
+    }
+
+    /* ===== SECTION TITLE ===== */
+    .section-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #fff;
+      background: #0f172a;
+      padding: 6px 14px;
+      border-radius: 6px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .section-title.green { background: linear-gradient(135deg,#04AA6D,#038a58); }
+    .section-title.blue { background: linear-gradient(135deg,#1565c0,#0d47a1); }
+    .section-title.purple { background: linear-gradient(135deg,#6a1b9a,#4a148c); }
+    .section-title.red { background: linear-gradient(135deg,#c62828,#b71c1c); }
+    .section-title.orange { background: linear-gradient(135deg,#e65100,#bf360c); }
+
+    /* ===== WORKFLOW FLOW ===== */
+    .flow-wrap {
+      display: flex;
+      align-items: stretch;
+      gap: 0;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+      row-gap: 10px;
+    }
+
+    .flow-step {
+      flex: 1;
+      min-width: 0;
+      background: #f8fafc;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 8px 7px 7px;
+      text-align: center;
+      position: relative;
+    }
+
+    .flow-step .step-num {
+      position: absolute;
+      top: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #0f172a;
+      color: #fff;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      font-size: 10px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .flow-step .step-icon { font-size: 20px; margin: 6px 0 2px; }
+    .flow-step .step-dept { font-size: 10px; font-weight: 700; color: #334155; line-height: 1.2; }
+    .flow-step .step-action { font-size: 9px; color: #64748b; margin-top: 2px; }
+
+    .flow-step.highlight { background: #ecfdf5; border-color: #04AA6D; }
+    .flow-step.highlight .step-dept { color: #065f46; }
+    .flow-step.highlight .step-num { background: #04AA6D; }
+
+    .flow-arrow {
+      display: flex;
+      align-items: center;
+      padding: 0 3px;
+      color: #94a3b8;
+      font-size: 14px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    /* ===== DEPARTMENT CARDS ===== */
+    .dept-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .dept-card {
+      border: 1.5px solid #e2e8f0;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .dept-card-head {
+      padding: 7px 12px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .dept-card-body { padding: 10px 12px; }
+
+    .dept-card-body ul { padding-left: 14px; }
+    .dept-card-body li { font-size: 11.5px; margin-bottom: 3px; color: #374151; }
+
+    .tag {
+      display: inline-block;
+      background: #ecfdf5;
+      color: #065f46;
+      border: 1px solid #a7f3d0;
+      border-radius: 4px;
+      padding: 1px 7px;
+      font-size: 10px;
+      font-weight: 600;
+      margin-top: 4px;
+    }
+
+    .tag.red { background: #fff1f2; color: #9f1239; border-color: #fecdd3; }
+    .tag.orange { background: #fff7ed; color: #9a3412; border-color: #fed7aa; }
+    .tag.blue { background: #eff6ff; color: #1e40af; border-color: #bfdbfe; }
+    .tag.purple { background: #faf5ff; color: #6b21a8; border-color: #e9d5ff; }
+
+    /* ===== RULE CARDS ===== */
+    .rule-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .rule-card {
+      border-radius: 8px;
+      padding: 10px 12px;
+      border: 1.5px solid #e2e8f0;
+    }
+
+    .rule-card .rule-icon { font-size: 18px; margin-bottom: 4px; }
+    .rule-card .rule-title { font-size: 12px; font-weight: 700; margin-bottom: 4px; color: #0f172a; }
+    .rule-card .rule-desc { font-size: 11px; color: #475569; line-height: 1.5; }
+
+    .rule-card.green { background: #ecfdf5; border-color: #86efac; }
+    .rule-card.red { background: #fff1f2; border-color: #fecdd3; }
+    .rule-card.blue { background: #eff6ff; border-color: #bfdbfe; }
+    .rule-card.orange { background: #fff7ed; border-color: #fed7aa; }
+    .rule-card.purple { background: #faf5ff; border-color: #e9d5ff; }
+    .rule-card.teal { background: #f0fdfa; border-color: #99f6e4; }
+
+    /* ===== CHECKLIST TABLE ===== */
+    .checklist-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11px;
+      margin-bottom: 18px;
+    }
+
+    .checklist-table th {
+      background: #0f172a;
+      color: #fff;
+      padding: 6px 8px;
+      text-align: left;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .checklist-table th:first-child { border-radius: 6px 0 0 0; }
+    .checklist-table th:last-child { border-radius: 0 6px 0 0; }
+
+    .checklist-table td {
+      padding: 5px 8px;
+      border-bottom: 1px solid #f1f5f9;
+      vertical-align: top;
+    }
+
+    .checklist-table tr:last-child td { border-bottom: none; }
+    .checklist-table tr:nth-child(even) td { background: #f8fafc; }
+
+    .opt-badge {
+      display: inline-block;
+      padding: 1px 7px;
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    /* ===== STATUS FLOW ===== */
+    .status-flow {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+
+    .status-badge {
+      padding: 3px 10px;
+      border-radius: 99px;
+      font-size: 10px;
+      font-weight: 600;
+      white-space: nowrap;
+      border: 1px solid transparent;
+    }
+
+    .status-arrow { color: #94a3b8; font-weight: 700; font-size: 12px; }
+
+    /* ===== VISIBILITY TABLE ===== */
+    .vis-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11.5px;
+      margin-bottom: 18px;
+    }
+
+    .vis-table th {
+      background: #1e293b;
+      color: #e2e8f0;
+      padding: 6px 10px;
+      text-align: center;
+      font-size: 11px;
+    }
+
+    .vis-table th:first-child { text-align: left; border-radius: 6px 0 0 0; }
+    .vis-table th:last-child { border-radius: 0 6px 0 0; }
+
+    .vis-table td {
+      padding: 6px 10px;
+      border-bottom: 1px solid #f1f5f9;
+      text-align: center;
+    }
+
+    .vis-table td:first-child { text-align: left; font-weight: 600; }
+    .vis-table tr:nth-child(even) td { background: #f8fafc; }
+
+    /* ===== FOOTER ===== */
+    .doc-footer {
+      border-top: 1px solid #e2e8f0;
+      padding-top: 8px;
+      margin-top: 18px;
+      display: flex;
+      justify-content: space-between;
+      font-size: 10px;
+      color: #94a3b8;
+    }
+
+    /* ===== PRINT ===== */
+    @media print {
+      body { background: #fff; }
+      .page {
+        margin: 0;
+        box-shadow: none;
+        page-break-after: always;
+        padding: 12mm;
+      }
+      .no-print { display: none !important; }
+      @page {
+        size: A4;
+        margin: 0;
+      }
+    }
+
+    /* ===== PRINT BUTTON ===== */
+    .print-btn {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #04AA6D;
+      color: #fff;
+      border: none;
+      padding: 12px 22px;
+      border-radius: 50px;
+      font-family: 'Sarabun', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 4px 16px rgba(4,170,109,0.4);
+      z-index: 999;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .print-btn:hover { background: #038a58; }
+  </style>
+</head>
+<body>
+
+<button class="print-btn no-print" onclick="window.print()">🖨️ พิมพ์ / บันทึก PDF</button>
+
+<!-- ===================== PAGE 1 ===================== -->
+<div class="page">
+
+  <!-- Header -->
+  <div class="doc-header">
+    <div class="doc-logo">
+      <div class="logo-circle">LD</div>
+      <div>
+        <div class="doc-title-main">LOANDD</div>
+        <div class="doc-title-sub">ระบบบริหารจัดการสินเชื่อจำนองและขายฝาก</div>
+      </div>
+    </div>
+    <div class="doc-meta">
+      <div style="font-weight:700;font-size:13px;color:#0f172a;">Workflow การทำงาน</div>
+      <div>เอกสารอ้างอิงสำหรับทีมงาน</div>
+    </div>
+  </div>
+
+  <!-- Section 1: Flow หลัก -->
+  <div class="section-title green">📋 ขั้นตอนการทำงานหลัก (8 ขั้นตอน)</div>
+
+  <div class="flow-wrap">
+    <div class="flow-step">
+      <div class="step-num">0</div>
+      <div class="step-icon">💬</div>
+      <div class="step-dept">แชท</div>
+      <div class="step-action">รับลูกค้า</div>
+    </div>
+    <div class="flow-arrow">›</div>
+    <div class="flow-step highlight">
+      <div class="step-num">1</div>
+      <div class="step-icon">👤</div>
+      <div class="step-dept">สร้างลูกหนี้</div>
+      <div class="step-action">ฝ่ายขาย</div>
+    </div>
+    <div class="flow-arrow">›</div>
+    <div class="flow-step">
+      <div class="step-num">2</div>
+      <div class="step-icon">🏠</div>
+      <div class="step-dept">ลงพื้นที่</div>
+      <div class="step-action">ฝ่ายประเมิน</div>
+    </div>
+    <div class="flow-arrow">›</div>
+    <div class="flow-step">
+      <div class="step-num">3</div>
+      <div class="step-icon">📋</div>
+      <div class="step-dept">เอาตาราง</div>
+      <div class="step-action">ฝ่ายอนุมัติ</div>
+    </div>
+    <div class="flow-arrow">›</div>
+    <div class="flow-step highlight">
+      <div class="step-num">4</div>
+      <div class="step-icon">📁</div>
+      <div class="step-dept">สร้างเคส</div>
+      <div class="step-action">ฝ่ายขาย</div>
+    </div>
+    <div class="flow-arrow">›</div>
+    <div class="flow-step">
+      <div class="step-num">5</div>
+      <div class="step-icon">⚖️</div>
+      <div class="step-dept">นิติกรรม</div>
+      <div class="step-action">จดทะเบียน</div>
+    </div>
+    <div class="flow-arrow">›</div>
+    <div class="flow-step">
+      <div class="step-num">6</div>
+      <div class="step-icon">📄</div>
+      <div class="step-dept">ออกสัญญา</div>
+      <div class="step-action">จัดทำสัญญา</div>
+    </div>
+    <div class="flow-arrow">›</div>
+    <div class="flow-step">
+      <div class="step-num">7</div>
+      <div class="step-icon">🔨</div>
+      <div class="step-dept">ประมูล</div>
+      <div class="step-action">จัดหานักลงทุน</div>
+    </div>
+  </div>
+
+  <!-- Section 2: ความรับผิดชอบแต่ละฝ่าย -->
+  <div class="section-title blue">🏢 ความรับผิดชอบแต่ละฝ่าย</div>
+
+  <div class="dept-grid">
+
+    <div class="dept-card">
+      <div class="dept-card-head" style="background:linear-gradient(135deg,#2e7d32,#1b5e20)">
+        👤 ฝ่ายขาย (Sales)
+      </div>
+      <div class="dept-card-body">
+        <ul>
+          <li>รับแชทลูกค้าจาก LINE / Facebook</li>
+          <li>ระบบแจกแชทด้วย <strong>Round-Robin</strong> อัตโนมัติ</li>
+          <li>กรอกข้อมูลลูกหนี้ ทรัพย์ วงเงิน</li>
+          <li>เลือกสถานะสมรส → ดู Checklist เอกสาร</li>
+          <li>สร้างเคส <em>หลัง</em>ฝ่ายอนุมัติเอาตารางมาแล้วเท่านั้น</li>
+        </ul>
+        <span class="tag blue">debtor_code: LDD0001</span>
+        <span class="tag">case_code: CS0001</span>
+      </div>
+    </div>
+
+    <div class="dept-card">
+      <div class="dept-card-head" style="background:linear-gradient(135deg,#e65100,#bf360c)">
+        🏠 ฝ่ายประเมิน (Appraisal)
+      </div>
+      <div class="dept-card-body">
+        <ul>
+          <li>ลงพื้นที่ถ่ายรูปทรัพย์จริง</li>
+          <li>อัพโหลดรูปทรัพย์ (ทุกฝ่ายเห็น)</li>
+          <li>กรอกราคาประเมิน + อัพโหลดเล่มประเมิน</li>
+          <li>บันทึกผล: <strong>passed / not_passed</strong></li>
+        </ul>
+        <span class="tag red">⚠️ ฝ่ายขายไม่เห็นราคาและเล่มประเมิน</span>
+      </div>
+    </div>
+
+    <div class="dept-card">
+      <div class="dept-card-head" style="background:linear-gradient(135deg,#6a1b9a,#4a148c)">
+        📋 ฝ่ายอนุมัติ (Approval)
+      </div>
+      <div class="dept-card-body">
+        <ul>
+          <li>รับตารางประเมินจากฝ่ายประเมิน</li>
+          <li>พิจารณาวงเงินและความเสี่ยง</li>
+          <li>ดูเล่มประเมินประกอบการตัดสินใจ</li>
+          <li>อนุมัติ → ฝ่ายขายสร้างเคสได้</li>
+        </ul>
+        <span class="tag purple">approval_status: approved / cancelled</span>
+      </div>
+    </div>
+
+    <div class="dept-card">
+      <div class="dept-card-head" style="background:linear-gradient(135deg,#c62828,#b71c1c)">
+        ⚖️ ฝ่ายนิติกรรม (Legal)
+      </div>
+      <div class="dept-card-body">
+        <ul>
+          <li>นัดวันจดทะเบียนโอน</li>
+          <li>อัพโหลดสัญญาและเอกสารกฎหมาย</li>
+          <li>อัพโหลดสลิปค่าคอมมิชชั่น</li>
+          <li><strong>ต้องมีสลิปค่าคอม ก่อนปิดเคส</strong></li>
+        </ul>
+        <span class="tag red">🔒 บล็อกถ้าไม่มีสลิปค่าคอม</span>
+      </div>
+    </div>
+
+    <div class="dept-card">
+      <div class="dept-card-head" style="background:linear-gradient(135deg,#1565c0,#0d47a1)">
+        📄 ฝ่ายออกสัญญา (Issuing)
+      </div>
+      <div class="dept-card-body">
+        <ul>
+          <li>จัดทำสัญญาจำนอง / ขายฝากฉบับจริง</li>
+          <li>อัพโหลดเอกสารสัญญา</li>
+          <li>issuing_status: pending → sent</li>
+        </ul>
+        <span class="tag blue">เห็นเล่มประเมิน ✅</span>
+      </div>
+    </div>
+
+    <div class="dept-card">
+      <div class="dept-card-head" style="background:linear-gradient(135deg,#4e342e,#3e2723)">
+        🔨 ฝ่ายประมูล (Auction)
+      </div>
+      <div class="dept-card-body">
+        <ul>
+          <li>ออกประกาศประมูลให้นักลงทุน</li>
+          <li>จับคู่นักลงทุนกับเคส</li>
+          <li>บันทึก investor_history</li>
+          <li>auction_status: pending → auctioned</li>
+        </ul>
+        <span class="tag">cases.status → matched → completed</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Footer Page 1 -->
+  <div class="doc-footer">
+    <span>LOANDD System Workflow</span>
+    <span>หน้า 1 / 2</span>
+  </div>
+
+</div>
+
+<!-- ===================== PAGE 2 ===================== -->
+<div class="page">
+
+  <!-- Header -->
+  <div class="doc-header">
+    <div class="doc-logo">
+      <div class="logo-circle">LD</div>
+      <div>
+        <div class="doc-title-main">LOANDD</div>
+        <div class="doc-title-sub">ระบบบริหารจัดการสินเชื่อจำนองและขายฝาก</div>
+      </div>
+    </div>
+    <div class="doc-meta">
+      <div style="font-weight:700;font-size:13px;color:#0f172a;">Workflow การทำงาน</div>
+      <div>เอกสารอ้างอิงสำหรับทีมงาน</div>
+    </div>
+  </div>
+
+  <!-- Section 3: กฎสำคัญ -->
+  <div class="section-title orange">⭐ กฎสำคัญในระบบ</div>
+
+  <div class="rule-grid" style="grid-template-columns:1fr 1fr 1fr;">
+
+    <div class="rule-card green">
+      <div class="rule-icon">🔄</div>
+      <div class="rule-title">Round-Robin Chat</div>
+      <div class="rule-desc">แชทใหม่ถูกแจกให้เซลล์คนต่อไปในคิวอัตโนมัติ ไม่มีใครได้งานซ้ำกัน</div>
+    </div>
+
+    <div class="rule-card red">
+      <div class="rule-icon">🧾</div>
+      <div class="rule-title">Commission Slip Gate</div>
+      <div class="rule-desc">ฝ่ายนิติกรรม<strong>ต้องอัพโหลด</strong>สลิปค่าคอมมิชชั่น ก่อนจะ set status = completed ได้</div>
+    </div>
+
+    <div class="rule-card orange">
+      <div class="rule-icon">🔒</div>
+      <div class="rule-title">ซ่อนราคาจากเซลล์</div>
+      <div class="rule-desc">ฝ่ายขาย<strong>ไม่เห็น</strong>ราคาประเมินและเล่มประเมิน เห็นได้เฉพาะรูปทรัพย์เท่านั้น</div>
+    </div>
+
+    <div class="rule-card blue">
+      <div class="rule-icon">📋</div>
+      <div class="rule-title">Checklist ตามสถานะสมรส</div>
+      <div class="rule-desc">เลือกสถานะสมรส → ระบบแสดงเอกสารที่ต้องใช้ตาม Option A–E อัตโนมัติ</div>
+    </div>
+
+    <div class="rule-card teal">
+      <div class="rule-icon">📸</div>
+      <div class="rule-title">รูปทรัพย์ทุกฝ่ายเห็น</div>
+      <div class="rule-desc">รูปทรัพย์จากฝ่ายประเมิน (appraisal_images) ทุกฝ่ายเห็นได้หมด</div>
+    </div>
+
+    <div class="rule-card purple">
+      <div class="rule-icon">🆔</div>
+      <div class="rule-title">ID ไม่ซ้ำกัน</div>
+      <div class="rule-desc">ลูกหนี้: <strong>LDD</strong>0001 · เคส: <strong>CS</strong>0001 · นายหน้า: <strong>AGT</strong>0001</div>
+    </div>
+
+  </div>
+
+  <!-- Section 4: Checklist เอกสาร -->
+  <div class="section-title purple">📄 Checklist เอกสารตามสถานะสมรส (SOP 5.2)</div>
+
+  <table class="checklist-table">
+    <thead>
+      <tr>
+        <th style="width:14%">Option</th>
+        <th style="width:18%">สถานะ</th>
+        <th>เอกสารที่ต้องใช้</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="opt-badge" style="background:#dbeafe;color:#1e40af">A</span></td>
+        <td><strong>โสด</strong></td>
+        <td>บัตรประชาชน · ทะเบียนบ้าน · โฉนดที่ดิน / นส.3 · สำเนาเอกสารสิทธิ์</td>
+      </tr>
+      <tr>
+        <td><span class="opt-badge" style="background:#ede9fe;color:#5b21b6">B</span></td>
+        <td><strong>สมรส<br/>(จดทะเบียน)</strong></td>
+        <td>บัตรประชาชนทั้งคู่ · ทะเบียนบ้านทั้งคู่ · ทะเบียนสมรส · โฉนด · หนังสือยินยอมคู่สมรส</td>
+      </tr>
+      <tr>
+        <td><span class="opt-badge" style="background:#ffedd5;color:#9a3412">C</span></td>
+        <td><strong>สมรส<br/>(ไม่จดทะเบียน)</strong></td>
+        <td>บัตรประชาชนทั้งคู่ · ทะเบียนบ้านทั้งคู่ · หนังสือรับรองการอยู่กินร่วมกัน · โฉนด · หนังสือยินยอม</td>
+      </tr>
+      <tr>
+        <td><span class="opt-badge" style="background:#fee2e2;color:#991b1b">D</span></td>
+        <td><strong>หย่า</strong></td>
+        <td>บัตรประชาชน · ทะเบียนบ้าน · ใบหย่า / คำพิพากษา · โฉนด</td>
+      </tr>
+      <tr>
+        <td><span class="opt-badge" style="background:#dcfce7;color:#166534">E</span></td>
+        <td><strong>รับมรดก</strong></td>
+        <td>บัตรประชาชน · ทะเบียนบ้าน · ใบมรณะบัตร · คำสั่งศาลแต่งตั้งผู้จัดการมรดก · โฉนด · บัญชีเครือญาติ</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Section 5: Status Flow -->
+  <div class="section-title" style="background:linear-gradient(135deg,#0f172a,#1e293b)">🔄 Status Flow ของ cases.status</div>
+
+  <div class="status-flow">
+    <span class="status-badge" style="background:#f1f5f9;color:#475569;border-color:#cbd5e1">pending</span>
+    <span class="status-arrow">→</span>
+    <span class="status-badge" style="background:#fff7ed;color:#c2410c;border-color:#fed7aa">appraisal_passed</span>
+    <span class="status-arrow">→</span>
+    <span class="status-badge" style="background:#faf5ff;color:#7e22ce;border-color:#d8b4fe">pending_approve</span>
+    <span class="status-arrow">→</span>
+    <span class="status-badge" style="background:#faf5ff;color:#7e22ce;border-color:#d8b4fe">credit_approved</span>
+    <span class="status-arrow">→</span>
+    <span class="status-badge" style="background:#fff1f2;color:#be123c;border-color:#fecdd3">legal_scheduled</span>
+    <span class="status-arrow">→</span>
+    <span class="status-badge" style="background:#fff1f2;color:#be123c;border-color:#fecdd3">legal_completed</span>
+    <span class="status-arrow">→</span>
+    <span class="status-badge" style="background:#eff6ff;color:#1e40af;border-color:#bfdbfe">preparing_docs</span>
+    <span class="status-arrow">→</span>
+    <span class="status-badge" style="background:#fefce8;color:#713f12;border-color:#fde68a">pending_auction</span>
+    <span class="status-arrow">→</span>
+    <span class="status-badge" style="background:#fefce8;color:#713f12;border-color:#fde68a">auction_completed</span>
+    <span class="status-arrow">→</span>
+    <span class="status-badge" style="background:#dcfce7;color:#166534;border-color:#86efac">matched</span>
+    <span class="status-arrow">→</span>
+    <span class="status-badge" style="background:#dcfce7;color:#166534;border-color:#86efac">✅ completed</span>
+  </div>
+
+  <!-- Section 6: การมองเห็นข้อมูลประเมิน -->
+  <div class="section-title red">👁️ สิทธิ์การมองเห็นข้อมูลประเมิน</div>
+
+  <table class="vis-table">
+    <thead>
+      <tr>
+        <th>ฝ่าย</th>
+        <th>รูปทรัพย์<br/>(appraisal_images)</th>
+        <th>เล่มประเมิน<br/>(appraisal_book)</th>
+        <th>ราคาประเมิน<br/>(check_price)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>🧑‍💼 ฝ่ายขาย</td>
+        <td>✅</td>
+        <td>❌</td>
+        <td>❌</td>
+      </tr>
+      <tr>
+        <td>🏠 ฝ่ายประเมิน</td>
+        <td>✅</td>
+        <td>✅</td>
+        <td>✅</td>
+      </tr>
+      <tr>
+        <td>📋 ฝ่ายอนุมัติ</td>
+        <td>✅</td>
+        <td>✅</td>
+        <td>✅</td>
+      </tr>
+      <tr>
+        <td>⚖️ ฝ่ายนิติกรรม</td>
+        <td>✅</td>
+        <td>✅</td>
+        <td>✅</td>
+      </tr>
+      <tr>
+        <td>📄 ฝ่ายออกสัญญา</td>
+        <td>✅</td>
+        <td>✅</td>
+        <td>✅</td>
+      </tr>
+      <tr>
+        <td>🔨 ฝ่ายประมูล</td>
+        <td>✅</td>
+        <td>✅</td>
+        <td>✅</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Footer Page 2 -->
+  <div class="doc-footer">
+    <span>LOANDD System Workflow — เอกสารอ้างอิงสำหรับทีมงาน</span>
+    <span>หน้า 2 / 2</span>
+  </div>
+
+</div>
+
+</body>
+</html>

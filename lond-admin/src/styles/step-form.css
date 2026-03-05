@@ -1,0 +1,705 @@
+/* ====================================
+   Step Form - LoanDD Admin
+   สไตล์ฟอร์มแบบ 3 ขั้นตอน
+   ==================================== */
+
+/* === Container === */
+.lp-container {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 30px 20px 80px;
+  min-height: 80vh;
+}
+
+/* === Header === */
+.lp-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.lp-header h1 {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--dark);
+  margin-bottom: 8px;
+}
+
+.lp-header h1 i {
+  color: var(--primary);
+  margin-right: 8px;
+}
+
+.lp-header p {
+  color: var(--gray);
+  font-size: 14px;
+  margin: 0;
+}
+
+/* === Step Indicator === */
+.lp-steps {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+.lp-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  opacity: 0.4;
+  transition: opacity 0.3s;
+}
+
+.lp-step.active {
+  opacity: 1;
+}
+
+.lp-step.done {
+  opacity: 0.8;
+}
+
+.lp-step-num {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #e0e0e0;
+  color: #888;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 14px;
+  transition: all 0.3s;
+}
+
+.lp-step.active .lp-step-num,
+.lp-step.done .lp-step-num {
+  background: var(--primary);
+  color: #fff;
+}
+
+.lp-step span {
+  font-size: 12px;
+  color: #888;
+  font-weight: 500;
+}
+
+.lp-step.active span {
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.lp-step-line {
+  width: 50px;
+  height: 2px;
+  background: #ddd;
+  margin: 0 8px;
+  margin-bottom: 22px;
+}
+
+/* === Card === */
+.lp-card {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  padding: 28px 24px;
+  border: 1px solid #f0f0f0;
+}
+
+.lp-card-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--dark);
+  margin-bottom: 24px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.lp-card-title i {
+  color: var(--primary);
+  margin-right: 8px;
+}
+
+/* === Field === */
+.lp-field {
+  margin-bottom: 20px;
+  flex: 1;
+}
+
+.lp-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.lp-label .required {
+  color: #e53e3e;
+}
+
+/* === Input / Select / Textarea === */
+.lp-input,
+.lp-select,
+.lp-textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1.5px solid #ddd;
+  border-radius: 10px;
+  font-size: 16px;
+  font-family: 'Prompt', sans-serif;
+  color: #333;
+  background: #fff;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  box-sizing: border-box;
+}
+
+.lp-input:focus,
+.lp-select:focus,
+.lp-textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(4, 170, 109, 0.1);
+}
+
+.lp-textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+/* === Radio Cards (2 ตัวเลือก) === */
+.lp-radio-group {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.lp-radio-card {
+  position: relative;
+  cursor: pointer;
+  border: 2px solid #e8e8e8;
+  border-radius: 12px;
+  padding: 16px;
+  transition: all 0.2s;
+  background: #fafafa;
+}
+
+.lp-radio-card:hover {
+  border-color: var(--primary);
+  background: #f0faf5;
+}
+
+.lp-radio-card.selected {
+  border-color: var(--primary);
+  background: var(--primary-light);
+  box-shadow: 0 0 0 3px rgba(4, 170, 109, 0.15);
+}
+
+.lp-radio-card input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+}
+
+.lp-radio-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  text-align: center;
+}
+
+.lp-radio-content i {
+  font-size: 24px;
+  color: var(--primary);
+  margin-bottom: 4px;
+}
+
+.lp-radio-content strong {
+  font-size: 15px;
+  color: var(--dark);
+}
+
+.lp-radio-content small {
+  font-size: 12px;
+  color: #888;
+}
+
+/* === Type Grid (เลือกประเภท) === */
+.lp-type-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.lp-type-card {
+  cursor: pointer;
+  border: 2px solid #e8e8e8;
+  border-radius: 10px;
+  padding: 14px 8px;
+  text-align: center;
+  transition: all 0.2s;
+  background: #fafafa;
+}
+
+.lp-type-card:hover {
+  border-color: var(--primary);
+  background: #f0faf5;
+}
+
+.lp-type-card.selected {
+  border-color: var(--primary);
+  background: var(--primary-light);
+  box-shadow: 0 0 0 3px rgba(4, 170, 109, 0.15);
+}
+
+.lp-type-card i {
+  display: block;
+  font-size: 22px;
+  color: var(--primary);
+  margin-bottom: 6px;
+}
+
+.lp-type-card span {
+  font-size: 12px;
+  font-weight: 600;
+  color: #444;
+}
+
+/* === Money Input (฿ ข้างหน้า) === */
+.lp-input-money {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.lp-prefix {
+  position: absolute;
+  left: 14px;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--primary);
+  z-index: 1;
+}
+
+.lp-input-money .lp-input {
+  padding-left: 36px;
+}
+
+/* === Field Row (2-3 columns) === */
+.lp-field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+/* === Input Group (input + หน่วย) === */
+.lp-input-group {
+  display: flex;
+  gap: 8px;
+}
+
+.lp-input-group .lp-input {
+  flex: 1;
+}
+
+.lp-unit-label {
+  display: flex;
+  align-items: center;
+  padding: 0 14px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #555;
+  background: #f5f5f5;
+  border: 1.5px solid #ddd;
+  border-radius: 10px;
+  white-space: nowrap;
+}
+
+/* === Hint === */
+.lp-hint {
+  font-size: 13px;
+  color: #666;
+  margin-top: 6px;
+}
+
+.lp-hint i {
+  color: var(--primary);
+}
+
+.lp-hint-warn {
+  color: #e53e3e;
+  font-weight: 600;
+}
+
+/* === Divider === */
+.lp-divider {
+  border: none;
+  border-top: 1px solid #eee;
+  margin: 24px 0;
+}
+
+/* === Error === */
+.lp-error {
+  background: #fff5f5;
+  color: #c53030;
+  border: 1px solid #feb2b2;
+  border-radius: 10px;
+  padding: 12px 16px;
+  margin-bottom: 16px;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* === Buttons === */
+.lp-buttons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 28px;
+  gap: 12px;
+}
+
+.btn-lp-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  padding: 14px 28px;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  font-family: 'Prompt', sans-serif;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-lp-primary:hover {
+  background: var(--primary-dark);
+}
+
+.btn-lp-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #f5f5f5;
+  color: #666;
+  border: 1.5px solid #ddd;
+  padding: 14px 24px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: 'Prompt', sans-serif;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-lp-back:hover {
+  background: #eee;
+  color: #333;
+}
+
+.btn-lp-submit {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, var(--primary), #06c97e);
+  color: #fff;
+  border: none;
+  padding: 14px 28px;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 700;
+  font-family: 'Prompt', sans-serif;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 4px 12px rgba(4, 170, 109, 0.3);
+}
+
+.btn-lp-submit:hover {
+  box-shadow: 0 6px 16px rgba(4, 170, 109, 0.4);
+}
+
+.btn-lp-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-lp-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #fff;
+  color: var(--primary);
+  border: 2px solid var(--primary);
+  padding: 12px 24px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: 'Prompt', sans-serif;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-lp-secondary:hover {
+  background: var(--primary-light);
+}
+
+/* === Summary (Step 3) === */
+.lp-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.lp-summary-section {
+  background: #fafafa;
+  border-radius: 12px;
+  padding: 18px 20px;
+  border: 1px solid #eee;
+}
+
+.lp-summary-section h3 {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 14px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #eee;
+}
+
+.lp-summary-section h3 i {
+  margin-right: 6px;
+}
+
+.lp-summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 8px 0;
+  border-bottom: 1px solid #f5f5f5;
+}
+
+.lp-summary-row:last-child {
+  border-bottom: none;
+}
+
+.lp-summary-row span {
+  font-size: 14px;
+  color: #888;
+}
+
+.lp-summary-row strong {
+  font-size: 14px;
+  color: #333;
+  text-align: right;
+  max-width: 60%;
+}
+
+.lp-summary-row.highlight strong {
+  color: var(--primary);
+  font-size: 16px;
+}
+
+/* === Success Screen === */
+.lp-success {
+  text-align: center;
+  padding: 60px 20px;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.lp-success-icon {
+  font-size: 64px;
+  color: var(--primary);
+  margin-bottom: 16px;
+}
+
+.lp-success h2 {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--dark);
+  margin-bottom: 8px;
+}
+
+.lp-success p {
+  color: #666;
+  font-size: 15px;
+}
+
+.lp-success-sub {
+  color: var(--primary);
+  font-weight: 600;
+  font-size: 14px;
+  margin-top: 4px;
+}
+
+.lp-success-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 28px;
+}
+
+/* === Responsive === */
+@media (max-width: 640px) {
+  .lp-container {
+    padding: 20px 14px 80px;
+  }
+
+  .lp-header h1 {
+    font-size: 20px;
+  }
+
+  .lp-card {
+    padding: 20px 16px;
+  }
+
+  .lp-radio-group {
+    grid-template-columns: 1fr;
+  }
+
+  .lp-type-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .lp-field-row {
+    grid-template-columns: 1fr;
+  }
+
+  .lp-buttons {
+    flex-direction: column-reverse;
+  }
+
+  .btn-lp-primary,
+  .btn-lp-back,
+  .btn-lp-submit {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .lp-steps {
+    gap: 0;
+  }
+
+  .lp-step-line {
+    width: 30px;
+  }
+
+  .lp-step span {
+    font-size: 11px;
+  }
+
+  .lp-success-buttons {
+    flex-direction: column;
+  }
+}
+
+/* ===== EDIT PAGE MOBILE IMPROVEMENTS ===== */
+
+/* ── 900px: two-column edit grid → single column ── */
+/* (handled in global.css .edit-page-grid) */
+
+/* ── 768px: สำหรับ Edit pages ทุกฝ่าย ── */
+@media (max-width: 768px) {
+  /* header ของหน้า Edit (ชื่อเคส + ปุ่ม) */
+  .page-top-bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  /* ปุ่ม back + save อยู่ในแถวเดียวกัน */
+  .page-top-bar > div:last-child {
+    display: flex;
+    gap: 8px;
+  }
+  .page-top-bar > div:last-child .btn {
+    flex: 1;
+    justify-content: center;
+  }
+
+  /* ป้องกัน slip/document images overflow */
+  .slip-images-row,
+  .doc-images-row {
+    flex-wrap: wrap;
+  }
+
+  /* image upload preview touch-friendly */
+  input[type="file"] {
+    padding: 10px 0;
+    cursor: pointer;
+  }
+
+  /* ทำให้ label ของ document upload ใหญ่ขึ้น */
+  .doc-upload-label {
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+    padding: 10px 14px;
+  }
+
+  /* ซ่อน tooltip / hover effects บน touch */
+  @media (hover: none) {
+    .btn:hover,
+    .btn-icon:hover {
+      transform: none;
+    }
+  }
+}
+
+/* ── 600px: form grids ใน Edit pages ── */
+@media (max-width: 600px) {
+  /* ลด padding ใน card */
+  .lp-card {
+    padding: 14px 12px;
+  }
+
+  /* ป้ายสถานะ + ตัวเลือก แสดงแนวตั้ง */
+  [style*="display: flex"][style*="gap"] > [style*="border-radius: 8px"],
+  [style*="display: flex"][style*="gap"] > [style*="border-radius: 10px"] {
+    flex: 1 1 100%;
+  }
+
+  /* image thumb ขนาดเล็กลงบน mobile */
+  [style*="width: 60px"][style*="height: 60px"] {
+    width: 50px !important;
+    height: 50px !important;
+  }
+
+  /* ปุ่ม submit ในฟอร์ม full-width */
+  .btn-lp-submit,
+  .btn-lp-primary,
+  .btn-lp-back {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* แถวปุ่ม bottom stack vertically */
+  .lp-buttons {
+    flex-direction: column-reverse;
+  }
+}
+
+/* ── Extra-small: 360px ── */
+@media (max-width: 360px) {
+  .lp-card {
+    padding: 10px 8px;
+    border-radius: 10px;
+  }
+
+  .lp-card-title {
+    font-size: 15px;
+    margin-bottom: 16px;
+  }
+
+  /* ซ่อน long section labels */
+  .lp-card-title .long-label {
+    display: none;
+  }
+}

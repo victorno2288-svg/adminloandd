@@ -1,0 +1,40 @@
+/* ===== DASHBOARD ===== */
+.stat-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 20px; }
+.stat-card {
+  background: white; border-radius: 12px; padding: 20px;
+  display: flex; align-items: center; gap: 16px; box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+.stat-icon {
+  width: 48px; height: 48px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center; font-size: 20px; color: white;
+}
+.stat-icon.green { background: var(--primary); }
+.stat-icon.blue { background: var(--blue); }
+.stat-icon.orange { background: var(--orange); }
+.stat-icon.red { background: var(--red); }
+.stat-info h3 { font-size: 28px; font-weight: 700; }
+.stat-info p { font-size: 13px; color: var(--gray); }
+
+.dashboard-row { display: flex; gap: 16px; margin-bottom: 20px; }
+
+.chart-placeholder { text-align: center; color: var(--gray); }
+.chart-placeholder p { font-size: 14px; }
+.chart-note { margin-top: 16px; font-size: 12px; color: #bbb; }
+.chart-labels { display: flex; justify-content: center; gap: 16px; margin: 16px 0; font-size: 13px; }
+.chart-label { display: flex; align-items: center; gap: 6px; }
+.chart-label i { font-size: 8px; }
+
+.mini-bars { display: flex; justify-content: center; align-items: flex-end; gap: 12px; height: 120px; padding: 20px 0; }
+.mini-bar-col { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.mini-bar { width: 32px; background: #d1ecf1; border-radius: 4px 4px 0 0; min-height: 4px; }
+.mini-bar-col span { font-size: 12px; color: var(--gray); }
+
+.property-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #f5f5f5; font-size: 14px; }
+.investor-row { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid #f5f5f5; font-size: 14px; }
+.investor-rank { font-weight: 700; color: var(--primary); }
+.investor-id { color: var(--gray); font-size: 12px; margin-left: auto; }
+
+@media (max-width: 768px) {
+  .stat-cards { grid-template-columns: 1fr; }
+  .dashboard-row { flex-direction: column; }
+}
